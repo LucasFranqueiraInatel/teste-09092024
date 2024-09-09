@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework import generics
 from django_filters.rest_framework import DjangoFilterBackend
 from ..models import Consumer
-from .serializers import ConsumerSerializer, ConsumerCreateUpdateSerializer
+from .serializers import ConsumerSerializer, ConsumerCreateUpdateSerializer, CoverageRuleSerializer
 from calculator import calculator as calculate_energy_savings
 from ..models import DiscountRule
 from .serializers import DiscountRuleSerializer
@@ -63,10 +63,6 @@ class DeleteConsumerView(generics.DestroyAPIView):
 
 class CoverageRuleListView(APIView):
     def get(self, request):
-        coverage_rules = [
-            {"consumption_range": "<10000", "cover_value": 90},
-            {"consumption_range": "10000-20000", "cover_value": 95},
-            {"consumption_range": ">20000", "cover_value": 99},
-        ]
-        
-        return Response(coverage_rules, status=status.HTTP_200_OK)
+        coverages = DiscountRule.objects.values('consumption_range', 'cover_value').distinct()
+        serializer = CoverageRuleSerializer(coverages, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

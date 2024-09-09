@@ -23,3 +23,8 @@ class ConsumerCreateUpdateSerializer(serializers.ModelSerializer):
             'id', 'name', 'document', 'zip_code', 'city', 'state', 
             'consumption', 'distributor_tax', 'discount_rule'
         ]
+
+class CoverageRuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DiscountRule
+        fields = ['consumption_range', 'cover_value']
