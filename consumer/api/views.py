@@ -9,7 +9,7 @@ from calculator import calculator as calculate_energy_savings
 from ..models import DiscountRule
 from .serializers import DiscountRuleSerializer
 
-# View da API para a calculadora de economia de energia
+
 class EnergyCalculatorView(APIView):
     def post(self, request):
         consumptions = request.data.get('consumptions')
@@ -20,31 +20,53 @@ class EnergyCalculatorView(APIView):
             return Response({"error": "Todos os campos são obrigatórios"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            result = calculate_energy_savings(consumptions, tariff_value, tariff_type)
+            result = calculate_energy_savings(
+                consumptions, tariff_value, tariff_type)
             return Response(result, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class CreateConsumerView(generics.CreateAPIView):
     queryset = Consumer.objects.all()
     serializer_class = ConsumerCreateUpdateSerializer
 
+
 class ListConsumerView(generics.ListAPIView):
     queryset = Consumer.objects.all()
     serializer_class = ConsumerSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['discount_rule__consumer_type', 'consumption'] 
+
+    filterset_fields = {
+        'discount_rule__consumer_type': ['exact'],
+        'consumption': ['exact', 'gte', 'lte'],
+        'city': ['icontains'],
+        'state': ['icontains']
+    }
 
 class DiscountRuleListView(APIView):
     def get(self, request):
         rules = DiscountRule.objects.all()
         serializer = DiscountRuleSerializer(rules, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
+
 class UpdateConsumerView(generics.UpdateAPIView):
     queryset = Consumer.objects.all()
     serializer_class = ConsumerCreateUpdateSerializer
 
+
 class DeleteConsumerView(generics.DestroyAPIView):
     queryset = Consumer.objects.all()
     serializer_class = ConsumerCreateUpdateSerializer
+
+
+class CoverageRuleListView(APIView):
+    def get(self, request):
+        coverage_rules = [
+            {"consumption_range": "<10000", "cover_value": 90},
+            {"consumption_range": "10000-20000", "cover_value": 95},
+            {"consumption_range": ">20000", "cover_value": 99},
+        ]
+        
+        return Response(coverage_rules, status=status.HTTP_200_OK)
