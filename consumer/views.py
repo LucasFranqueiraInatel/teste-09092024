@@ -86,9 +86,10 @@ def calculator(request):
             'monthly_savings': monthly_savings,
             'applied_discount': applied_discount,
             'coverage': coverage,
+            'consumption': consumption[0],
+            'distributor_tax': distributor_tax,
+            'tax_type': tax_type,
         }
-
-        print(context)
 
         return render(request, 'consumer/calculator.html', context)
 

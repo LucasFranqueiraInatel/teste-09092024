@@ -71,3 +71,8 @@ A empresa de energia gostou da sua solução para a API e o seu site, mas necess
 3. Deverá ser criado um acesso via API para atualização de consumidor;
 4. Deverá ser criado um acesso via API para exclusão de consumidor;
 5. Disponibilizar uma documentação da API(Pode ser via Swagger).
+
+
+[Link 1 do video explicando o projeto](https://www.awesomescreenshot.com/video/31348301?key=7c61cad14a8543d3df7d3eb2b75685a1)
+[Link 2 do video explicando o projeto](https://drive.google.com/file/d/1rBwcjEEMOt-8rapFispKrw30DBMHqL4_/view?usp=drive_link)
+
